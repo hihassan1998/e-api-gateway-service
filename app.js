@@ -88,7 +88,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
         let investments = [];
 
         try {
-            const userResponse = await fetch("http://localhost:3002/users/me", {
+            const userResponse = await fetch("http://localhost:3002/users", {
                 headers: { Authorization: req.headers.authorization },
             });
 
@@ -100,7 +100,7 @@ app.get("/dashboard", authenticateToken, async (req, res) => {
         }
 
         try {
-            const businessResponse = await fetch("http://localhost:3003/investments", {
+            const businessResponse = await fetch("http://localhost:3003/business", {
                 headers: { Authorization: req.headers.authorization },
             });
 
