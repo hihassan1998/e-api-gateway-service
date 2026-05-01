@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const PORT = process.env.PORT || 3000;
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -61,5 +62,5 @@ app.get('/', (req, res) => {
 
 
 app.listen(3000, () => {
-    console.log("API Gateway service running on port 3002");
+    console.log(`API Gateway service running on ${PORT}`);
 });
