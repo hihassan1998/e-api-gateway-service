@@ -13,6 +13,39 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const gatewayLogger = require("./middleware/experimentLogger");
+
+app.use(gatewayLogger);
+
+
+app.use((req, res, next) => {
+  const start = Date.now();
+
+  const requestSize = Buffer.byteLength(
+    JSON.stringify(req.body || {})
+  );
+
+  console.log("📥 INCOMING REQUEST:", {
+    method: req.method,
+    url: req.originalUrl,
+    requestSizeBytes: requestSize,
+  });
+
+  res.on("finish", () => {
+    const duration = Date.now() - start;
+
+    console.log("📊 GATEWAY LOG:", {
+      method: req.method,
+      url: req.originalUrl,
+      status: res.statusCode,
+      durationMs: duration,
+      responseSize: res.get("Content-Length"),
+      userAgent: req.headers["user-agent"],
+    });
+  });
+
+  next();
+});
 
 // setupSwagger(app); changes asysnc function from sync
 // function authenticateToken(req, res, next) {
